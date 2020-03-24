@@ -31,5 +31,17 @@ module.exports = {
         return callback(null, results);
       }
     );
+  },
+  getUserByUserName: (user, callback) => {
+    pool.query(
+      `select * from fundacion where user = ?`,
+      [user],
+      (error, results, fields) => {
+        if (error) {
+          return callback(error);
+        }
+        return callback(null, results[0]);
+      }
+    );
   }
 };
