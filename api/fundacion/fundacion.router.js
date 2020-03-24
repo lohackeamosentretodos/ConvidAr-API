@@ -2,26 +2,28 @@ const {
   setGoal,
   RegisterFoundation,
   login,
-  insertPost
+  insertPost,
+  getTotalMoney
 } = require("./fundacion.controller");
 const router = require("express").Router();
 const { checkToken } = require("../../auth/token_validation");
 
-var multer  = require('multer');
+var multer = require("multer");
 var storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, '');
-    },
-    filename: (req, file, cb) => {
-      console.log(file);
-      cb(null, 'imagenes/' + file.originalname);
-    }
+  destination: (req, file, cb) => {
+    cb(null, "");
+  },
+  filename: (req, file, cb) => {
+    console.log(file);
+    cb(null, "imagenes/" + file.originalname);
+  }
 });
-var upload = multer({storage: storage});
+var upload = multer({ storage: storage });
 
 router.post("/uploadMetas", checkToken, setGoal);
 router.post("/register", RegisterFoundation);
-router.post("/insertPost", upload.single('file'), checkToken, insertPost);
+router.post("/insertPost", upload.single("file"), checkToken, insertPost);
 router.post("/login", login);
+router.get("/inicio", checkToken, getTotalMoney);
 
 module.exports = router;

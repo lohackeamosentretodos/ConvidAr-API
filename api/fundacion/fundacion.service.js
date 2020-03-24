@@ -35,6 +35,22 @@ module.exports = {
       }
     );
   },
+  getTotalMoney: (id_fundacion, callback) => {
+    pool.query(
+      `SELECT f.id_fundacion, f.nombre_fundacion, f.proposito, f.dinero_total, m.id_meta, m.monto, m.estado 
+      FROM metas m 
+      LEFT OUTER JOIN fundacion f ON m.id_fundacion = f.id_fundacion WHERE m.estado = ? AND f.id_fundacion = ?`,
+      ["activa", id_fundacion],
+
+      (error, results, fields) => {
+        if (error) {
+          return callback(error);
+        }
+        return callback(null, results[0]);
+      }
+    );
+  },
+
   register: (data, callback) => {
     pool.query(
       `insert into fundacion(nombre_fundacion, foto, proposito, dinero_total, user, password) values(?,?,?,?,?,?)`,

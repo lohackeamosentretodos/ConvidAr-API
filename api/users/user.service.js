@@ -15,6 +15,33 @@ module.exports = {
       }
     );
   },
+  pagar: (data, callback) => {
+    var dinero_total;
+    var pago = data.dinero_pago;
+    pool.query(
+      "SELECT dinero_total FROM fundacion WHERE id_fundacion = ?",
+      [data.id_fundacion],
+      (error, results, fields) => {
+        if (error) {
+          return callback(error);
+        } else {
+          dinero_total = JSON.parse(JSON.stringify(results[0])).dinero_total;
+          dinero_total = dinero_total + pago;
+          pool.query(
+            "update fundacion set dinero_total = ? where id_fundacion = ?",
+            [dinero_total, data.id_fundacion],
+            (error, results, fields) => {
+              if (error) {
+                return callback(error);
+              } else {
+                return callback(null, results);
+              }
+            }
+          );
+        }
+      }
+    );
+  },
   getFeedback: callback => {
     pool.query(
       `SELECT f.id_fundacion, f.nombre_fundacion,p.texto,p. multimedia

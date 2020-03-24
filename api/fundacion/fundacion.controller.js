@@ -2,7 +2,8 @@ const {
   setGoal,
   register,
   getUserByUserName,
-  insertPost
+  insertPost,
+  getTotalMoney
 } = require("./fundacion.service");
 const { genSaltSync, hashSync, compareSync } = require("bcrypt");
 const { sign } = require("jsonwebtoken");
@@ -16,6 +17,27 @@ module.exports = {
     );
     data.id_fundacion = credentials.sub;
     setGoal(data, (err, results) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({
+          success: 0,
+          message: "database connection error"
+        });
+      }
+      return res.json({
+        success: 1,
+        data: results
+      });
+    });
+  },
+
+  getTotalMoney: (req, res) => {
+    const base64Credentials = req.headers.authorization.split(".")[1];
+    const credentials = JSON.parse(
+      Buffer.from(base64Credentials, "base64").toString("ascii")
+    );
+    id_fundacion = credentials.sub;
+    getTotalMoney(id_fundacion, (err, results) => {
       if (err) {
         console.log(err);
         return res.status(500).json({
@@ -104,12 +126,12 @@ module.exports = {
     const credentials = JSON.parse(
       Buffer.from(base64Credentials, "base64").toString("ascii")
     );
-    if(!req.file) {
+    if (!req.file) {
       res.status(500);
       return next(err);
     }
     data.id_fundacion = credentials.sub;
-    insertPost(data, req.file.filename,(err, results) => {
+    insertPost(data, req.file.filename, (err, results) => {
       if (err) {
         console.log(err);
         return res.status(500).json({

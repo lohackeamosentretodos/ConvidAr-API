@@ -2,6 +2,7 @@ const {
   getFoundationGoals,
   getFoundations,
   getFeedback,
+  pagar,
   getUserByUserEmail
 } = require("./user.service");
 const { genSaltSync, hashSync, compareSync } = require("bcrypt");
@@ -19,6 +20,22 @@ module.exports = {
           success: 0,
           message: "record not found"
         });
+      }
+      return res.json({
+        success: 1,
+        data: results
+      });
+    });
+  },
+  pagar: (req, res) => {
+    let data = req.body;
+    const id_fundacion = req.params.id_fundacion;
+    data.id_fundacion = id_fundacion;
+
+    pagar(data, (err, results) => {
+      if (err) {
+        console.log(err);
+        return;
       }
       return res.json({
         success: 1,
