@@ -3,13 +3,35 @@ const pool = require("../../config/database");
 module.exports = {
   setGoal: (data, callback) => {
     pool.query(
-      "INSERT INTO metas (id_fundacion, monto, estado) VALUES (?,?,?)",
-      [data.id_fundacion, data.monto, data.estado],
+      "select * from metas where id_fundacion = ? AND estado = ?",
+      [data.id_fundacion, "activa"],
       (error, results, fields) => {
         if (error) {
           return callback(error);
         }
-        return callback(null, results);
+        if (results[0]) {
+          pool.query(
+            "INSERT INTO metas (id_fundacion, monto, estado) VALUES (?,?,?)",
+            [data.id_fundacion, data.monto, "pendiente"],
+            (error, results, fields) => {
+              if (error) {
+                return callback(error);
+              }
+              return callback(null, results);
+            }
+          );
+        } else {
+          pool.query(
+            "INSERT INTO metas (id_fundacion, monto, estado) VALUES (?,?,?)",
+            [data.id_fundacion, data.monto, "activa"],
+            (error, results, fields) => {
+              if (error) {
+                return callback(error);
+              }
+              return callback(null, results);
+            }
+          );
+        }
       }
     );
   },

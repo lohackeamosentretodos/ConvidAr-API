@@ -104,7 +104,7 @@ module.exports = {
     const credentials = JSON.parse(
       Buffer.from(base64Credentials, "base64").toString("ascii")
     );
-    console.log(credentials.sub);
+
     data.id_fundacion = credentials.sub;
     insertPost(data, (err, results) => {
       if (err) {
