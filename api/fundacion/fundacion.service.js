@@ -46,8 +46,8 @@ module.exports = {
   },
   insertPost: (data, callback) => {
     pool.query(
-      "insert into publicacion(texto, multimedia) values(?,?)",
-      [data.texto, data.multimedia],
+      "insert into publicacion(texto, multimedia, id_fundacion) values(?,?, ?)",
+      [data.texto, data.multimedia, data.id_fundacion],
       (error, results, fields) => {
         if (error) {
           return callback(error);

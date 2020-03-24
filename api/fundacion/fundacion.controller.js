@@ -10,7 +10,11 @@ const { sign } = require("jsonwebtoken");
 module.exports = {
   setGoal: (req, res) => {
     const data = req.body;
-
+    const base64Credentials = req.headers.authorization.split(".")[1];
+    const credentials = JSON.parse(
+      Buffer.from(base64Credentials, "base64").toString("ascii")
+    );
+    data.id_fundacion = credentials.sub;
     setGoal(data, (err, results) => {
       if (err) {
         console.log(err);
@@ -27,6 +31,7 @@ module.exports = {
   },
   RegisterFoundation: (req, res) => {
     const body = req.body;
+
     const salt = genSaltSync(10);
     body.password = hashSync(body.password, salt);
     register(body, (err, results) => {
@@ -95,7 +100,12 @@ module.exports = {
   },
   insertPost: (req, res) => {
     const data = req.body;
-
+    const base64Credentials = req.headers.authorization.split(".")[1];
+    const credentials = JSON.parse(
+      Buffer.from(base64Credentials, "base64").toString("ascii")
+    );
+    console.log(credentials.sub);
+    data.id_fundacion = credentials.sub;
     insertPost(data, (err, results) => {
       if (err) {
         console.log(err);
