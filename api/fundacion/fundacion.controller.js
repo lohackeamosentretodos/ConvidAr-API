@@ -1,4 +1,9 @@
-const { setGoal, register, getUserByUserName } = require("./fundacion.service");
+const {
+  setGoal,
+  register,
+  getUserByUserName,
+  insertPost
+} = require("./fundacion.service");
 const { genSaltSync, hashSync, compareSync } = require("bcrypt");
 const { sign } = require("jsonwebtoken");
 
@@ -86,6 +91,23 @@ module.exports = {
           data: "invalid email or password"
         });
       }
+    });
+  },
+  insertPost: (req, res) => {
+    const data = req.body;
+
+    insertPost(data, (err, results) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({
+          success: 0,
+          message: "database connection error"
+        });
+      }
+      return res.json({
+        success: 1,
+        data: results
+      });
     });
   }
 };

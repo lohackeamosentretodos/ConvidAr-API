@@ -43,5 +43,17 @@ module.exports = {
         return callback(null, results[0]);
       }
     );
+  },
+  insertPost: (data, callback) => {
+    pool.query(
+      "insert into publicacion(texto, multimedia) values(?,?)",
+      [data.texto, data.multimedia],
+      (error, results, fields) => {
+        if (error) {
+          return callback(error);
+        }
+        return callback(null, results);
+      }
+    );
   }
 };
