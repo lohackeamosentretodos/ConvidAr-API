@@ -17,7 +17,7 @@ module.exports = {
   },
   getFeedback: callback => {
     pool.query(
-      `SELECT f.id_fundacion, f.nombre_fundacion, f.proposito, f.dinero_total, p.texto,p. multimedia
+      `SELECT f.id_fundacion, f.nombre_fundacion,p.texto,p. multimedia
       FROM publicacion p 
       LEFT OUTER JOIN fundacion f ON p.id_fundacion = f.id_fundacion`,
       [],
