@@ -66,10 +66,10 @@ module.exports = {
       }
     );
   },
-  insertPost: (data, callback) => {
+  insertPost: (data, imPath, callback) => {
     pool.query(
       "insert into publicacion(texto, multimedia, id_fundacion) values(?,?, ?)",
-      [data.texto, data.multimedia, data.id_fundacion],
+      [data.texto, imPath, data.id_fundacion],
       (error, results, fields) => {
         if (error) {
           return callback(error);

@@ -98,15 +98,18 @@ module.exports = {
       }
     });
   },
-  insertPost: (req, res) => {
+  insertPost: (req, res, next) => {
     const data = req.body;
     const base64Credentials = req.headers.authorization.split(".")[1];
     const credentials = JSON.parse(
       Buffer.from(base64Credentials, "base64").toString("ascii")
     );
-
+    if(!req.file) {
+      res.status(500);
+      return next(err);
+    }
     data.id_fundacion = credentials.sub;
-    insertPost(data, (err, results) => {
+    insertPost(data, req.file.filename,(err, results) => {
       if (err) {
         console.log(err);
         return res.status(500).json({
